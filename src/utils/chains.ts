@@ -2,6 +2,7 @@ import { Address, BigDecimal, BigInt, dataSource } from '@graphprotocol/graph-ts
 
 import { OPTIMISM_POOL_MAPPINGS } from '../backfill/poolMappings'
 import { StaticTokenDefinition } from './staticTokenDefinition'
+import { ADDRESS_ZERO } from './constants'
 
 export enum ChainId {
   ARBITRUM_ONE = 42161,
@@ -14,6 +15,7 @@ export enum ChainId {
   MATIC = 137,
   OPTIMISM = 10,
   ZKSYNC_ERA = 324,
+  MANTLE_SEPOLIA = 5003,
 }
 
 // subgraph does not support string enums, hence these constants
@@ -27,6 +29,7 @@ const MAINNET_NETWORK_NAME = 'mainnet'
 const MATIC_NETWORK_NAME = 'matic'
 const OPTIMISM_NETWORK_NAME = 'optimism'
 const ZKSYNC_ERA_NETWORK_NAME = 'zksync-era'
+const MANTLE_SEPOLIA_NETWORK_NAME = 'mantle-sepolia'
 
 // Note: All token and pool addresses should be lowercased!
 export class SubgraphConfig {
@@ -387,6 +390,19 @@ export function getSubgraphConfig(): SubgraphConfig {
           decimals: BigInt.fromI32(6),
         },
       ],
+      poolsToSkip: [],
+      poolMappings: [],
+    }
+  } else if (selectedNetwork == MANTLE_SEPOLIA_NETWORK_NAME) {
+    return {
+      factoryAddress: '0xbe35475FA5CC1e1A1A7D6E93143aA401a61dcE51',
+      stablecoinWrappedNativePoolAddress: ADDRESS_ZERO, // USDC.e/WETH 0.05% pool
+      stablecoinIsToken0: true,
+      wrappedNativeAddress: '0xc0eeCFA24E391E4259B7EF17be54Be5139DA1AC7', // WETH
+      minimumNativeLocked: BigDecimal.fromString('1'),
+      stablecoinAddresses: [],
+      whitelistTokens: [],
+      tokenOverrides: [],
       poolsToSkip: [],
       poolMappings: [],
     }
